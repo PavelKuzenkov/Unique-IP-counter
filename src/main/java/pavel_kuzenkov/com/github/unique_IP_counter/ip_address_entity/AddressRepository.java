@@ -10,11 +10,11 @@ public interface AddressRepository {
 
     /**
      * Сохранение нового уникального IP-адреса в хранилище.
-     * @param address Строка с IP-адресом.
+     * @param incomingAddress Массив значений октетов IP-адреса.
      * @return true если адрес уникален(в хранилище ещё нет такого адреса) и был сохран в хранилище,
      * false если хранилище уже содержит такой адрес.
      */
-    boolean put(String address);
+    boolean put(short[] incomingAddress);
 
     /**
      * Проверка хранилища на заполненность.
@@ -23,9 +23,10 @@ public interface AddressRepository {
      */
     boolean isFull();
 
-    /**
-     * Возвращает количество хранимых уникальных IP-адресов.
-     * @return количество хранимых уникальных IP-адресов.
-     */
-    long getNumberOfUniqueAddresses();
+    // TODO вынести функционал за пределы класса
+//    /**
+//     * Возвращает количество хранимых уникальных IP-адресов.
+//     * @return количество хранимых уникальных IP-адресов.
+//     */
+//    long getNumberOfUniqueAddresses();
 }

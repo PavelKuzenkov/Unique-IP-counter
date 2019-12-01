@@ -47,7 +47,7 @@ class LazyLastOctet implements Octet {
     }
 
     @Override
-    public boolean addNewOctet(short[] address, short octetNumber) {
+    public boolean addNextOctet(short[] address, int octetNumber) {
         return false;
     }
 
