@@ -25,13 +25,29 @@ class LastOctet implements Octet {
      */
     private short fillCounter = 0;
 
+    /**
+     * Проверка данного октета на заполненность.
+     * @return true если данный и следующий(если он есть) октет заполнены(содержит все возможные варианты),
+     * false если октет ещё не заполнен.
+     */
     @Override
     public boolean isFull() {
         return full;
     }
 
+    /**
+     * Добавление нового значения октета. Учет заполненности октета.
+     * @param address массив со значениями октетов.
+     * @param octetNumber номер ячейки массива, содержащей значение для следующего октета.
+     * @return true если адрес уникален(в хранилище ещё нет такого адреса) и был сохран в хранилище,
+     * false если хранилище уже содержит такой адрес.
+     */
     @Override
     public boolean addNextOctet(short[] address, int octetNumber) {
-        return false;
+        if (!lastOctets[address[octetNumber]]) {
+            lastOctets[address[octetNumber]] = true;
+            if (++fillCounter == 256) full = true;
+            return true;
+        } else return false;
     }
 }
