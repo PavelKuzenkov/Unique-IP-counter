@@ -13,7 +13,7 @@ class NotLastOctet implements Octet {
     /**
      * Массив со следующими октетами.
      */
-    private Octet[] nextOctet;
+    private Octet[] nextOctets = new Octet[256];
 
     /**
      * Индикатор заполненности массива со следующими октетами.

@@ -2,8 +2,9 @@ package pavel_kuzenkov.com.github.unique_IP_counter.ip_address_entity;
 
 /**
  * Class UniqueAddressRepository. Хранилище уникальных IP-адресов.
- * Работает в "ленивом" режиме инициализаци. Представляет собой четырёхуровневое
- * "дерево". По одному уровню на каждый октет IP-адреса.
+ * Работает в "ленивом" режиме инициализаци. Вместо одного массива
+ *  со значениями адресов октета хранит 4 массива, которые инициализируются по мере надобности.
+ *  Представляет собой четырёхуровневое "дерево". По одному уровню на каждый октет IP-адреса.
  *
  * @author Kuzenkov Pavel.
  * @since 01.12.2019
@@ -14,10 +15,10 @@ class UniqueAddressLazyRepository implements AddressRepository {
     /**
      * Блоки "ленивой" инициализации. Содержат уникальные адреса
      */
-    private Octet[] addressesBlock1 = new Octet[64];
-    private Octet[] addressesBlock2 = new Octet[64];
-    private Octet[] addressesBlock3 = new Octet[64];
-    private Octet[] addressesBlock4 = new Octet[64];
+    private Octet[] addressesBlock1 = null;
+    private Octet[] addressesBlock2 = null;
+    private Octet[] addressesBlock3 = null;
+    private Octet[] addressesBlock4 = null;
 
     /**
      * Индикатор заполненности хранилища.
@@ -59,5 +60,26 @@ class UniqueAddressLazyRepository implements AddressRepository {
     @Override
     public long getNumberOfUniqueAddresses() {
         return uniqueAddressCounter;
+    }
+
+    /**
+     * Инициализация нужного блока с адресами.
+     * @param blocNumber номер блока, который необходимо инициализировать.
+     */
+    private void initiateOctetsBlock(int blocNumber) {
+        switch (blocNumber) {
+            case 1:
+                addressesBlock1 = new Octet[64];
+                break;
+            case 2:
+                addressesBlock2 = new Octet[64];
+                break;
+            case 3:
+                addressesBlock3 = new Octet[64];
+                break;
+            case 4:
+                addressesBlock4 = new Octet[64];
+                break;
+        }
     }
 }
