@@ -14,18 +14,18 @@ public interface AddressRepository {
      * @return true если адрес уникален(в хранилище ещё нет такого адреса) и был сохран в хранилище,
      * false если хранилище уже содержит такой адрес.
      */
-    public boolean put(String address);
+    boolean put(String address);
 
     /**
      * Проверка хранилища на заполненность.
      * @return true если хранилище полностью заполнено(содержит все возможные варианты IP-адресов),
      * false если хранилище ещё не заполнено.
      */
-    public boolean isFull();
+    boolean isFull();
 
     /**
      * Возвращает количество хранимых уникальных IP-адресов.
      * @return количество хранимых уникальных IP-адресов.
      */
-    public long getNumberOfUniqueAddresses();
+    long getNumberOfUniqueAddresses();
 }

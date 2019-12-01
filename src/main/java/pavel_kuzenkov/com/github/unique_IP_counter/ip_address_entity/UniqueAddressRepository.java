@@ -9,7 +9,7 @@ package pavel_kuzenkov.com.github.unique_IP_counter.ip_address_entity;
  * @since 01.12.2019
  */
 
-public class UniqueAddressRepository implements AddressRepository{
+class UniqueAddressRepository implements AddressRepository{
 
     /**
      * Массив с уникальными адресами.
