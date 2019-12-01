@@ -46,7 +46,7 @@ class LastOctet implements Octet {
     public boolean addNextOctet(short[] address, int octetNumber) {
         if (!lastOctets[address[octetNumber]]) {
             lastOctets[address[octetNumber]] = true;
-            if (++fillCounter == 256) full = true;
+            if (++fillCounter >= 256) full = true;
             return true;
         } else return false;
     }
