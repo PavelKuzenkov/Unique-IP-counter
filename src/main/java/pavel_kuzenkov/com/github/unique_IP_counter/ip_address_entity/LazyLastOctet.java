@@ -41,14 +41,45 @@ class LazyLastOctet implements Octet {
     private byte fillCounter3 = 0;
     private byte fillCounter4 = 0;
 
+    /**
+     * Проверка данного октета на заполненность.
+     * @return true если данный и следующий(если он есть) октет заполнены(содержит все возможные варианты),
+     * false если октет ещё не заполнен.
+     */
     @Override
     public boolean isFull() {
-        return false;
+        return full;
     }
 
+    /**
+     * Добавление нового значения октета. Учет заполненности октета.
+     * @param address массив со значениями октетов.
+     * @param octetNumber номер ячейки массива, содержащей значение для следующего октета.
+     * @return true если адрес уникален(в хранилище ещё нет такого адреса) и был сохран в хранилище,
+     * false если хранилище уже содержит такой адрес.
+     */
     @Override
     public boolean addNextOctet(short[] address, int octetNumber) {
-        return false;
+        return true;
+//        whichBlock(address[octetNumber]);
+////        int position = 0;
+//        if (!lastOctets[address[octetNumber]]) {
+//            lastOctets[address[octetNumber]] = true;
+//            if (++fillCounter == 256) full = true;
+//            return true;
+//        } else return false;
+    }
+
+    /**
+     * Определяем, в какой блок нужно добавить новое значение.
+     * @param firstOctetValue Значение октета.
+     * @return номер блока.
+     */
+    private int whichBlock(short firstOctetValue) {
+        if (firstOctetValue >= 0 && firstOctetValue < 64) return 1;
+        if (firstOctetValue >= 64 && firstOctetValue < 128) return 2;
+        if (firstOctetValue >= 128 && firstOctetValue < 192) return 3;
+        return 4;
     }
 
     /**
