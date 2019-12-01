@@ -19,7 +19,8 @@ package pavel_kuzenkov.com.github.unique_IP_counter.ip_address_entity;
 class UniqueAddressRepository implements AddressRepository{
 
     /**
-     * Массив с уникальными адресами.
+     * Массив с последовательностью октетов (уникальных адресов). Данный массив является первым в последовательности.
+     * По сути "корнем дерева". Список первых октетов.
      */
     private Octet[] addresses = new Octet[256];
 
@@ -46,12 +47,16 @@ class UniqueAddressRepository implements AddressRepository{
      */
     @Override
     public boolean put(short[] incomingAddress) {
+        if (!isValidAddress(incomingAddress)) {
+            printInfo(incomingAddress);
+            return false;
+        }
         Octet destination = addresses[incomingAddress[0]];
         if (destination == null) {
             return createNewOctetAndPut(incomingAddress);
         }
         if (destination.isFull()) return false;
-        return destination.addNextOctet(incomingAddress, 1);
+        return destination.addNextOctet(incomingAddress, 2);
     }
 
     /**
@@ -60,11 +65,41 @@ class UniqueAddressRepository implements AddressRepository{
      * @return true т.к. адрес уникален(новый октет) и был сохран в хранилище.
      */
     private boolean createNewOctetAndPut(short[] incomingAddress) {
-        NotLastOctet newOctet = new NotLastOctet();
+        NotLastOctet newOctet = new NotLastOctet(2);
         addresses[incomingAddress[0]] = newOctet;
-        return newOctet.addNextOctet(incomingAddress, 1);
+        return newOctet.addNextOctet(incomingAddress, 2);
     }
 
+    /**
+     * Проверка входящего массива с IP-адресом на валидность. По идее данный метод должен быть тут, так как
+     * хранилище должно само проверять входные данные на валидность.
+     * @param incomingAddress Массив значений октетов IP-адреса.
+     * @return true если адрес валидный, false если адрес не валидный.
+     */
+    private boolean isValidAddress(short[] incomingAddress) {
+        if (incomingAddress.length != 4) {
+            return false;
+        }
+        for (int i = 0; i < 4; i++) {
+            if (incomingAddress[i] < 0 || incomingAddress[i] > 255) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * вывод в консоль сообщения о поступлении невалидного адреса.
+     * @param incomingAddress Массив значений октетов IP-адреса.
+     */
+    private void printInfo(short[] incomingAddress) {
+        StringBuilder message = new StringBuilder();
+        for (short address : incomingAddress) {
+            message.append(address).append(".");
+        }
+        message.append(" - невалидный IP-адрес!");
+        System.out.println(message);
+    }
 
     @Override
     public boolean isFull() {
