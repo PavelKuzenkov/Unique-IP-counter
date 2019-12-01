@@ -33,13 +33,13 @@ public class UniqueAddressRepository implements AddressRepository{
 
     @Override
     public boolean put(String address) {
-
+        uniqueAddressCounter++;
         return false;
     }
 
     @Override
     public boolean isFull() {
-        return false;
+        return full;
     }
 
     @Override

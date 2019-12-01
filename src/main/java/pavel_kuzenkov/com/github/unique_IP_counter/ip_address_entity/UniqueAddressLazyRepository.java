@@ -53,7 +53,7 @@ public class UniqueAddressLazyRepository implements AddressRepository {
 
     @Override
     public boolean isFull() {
-        return false;
+        return full;
     }
 
     @Override
