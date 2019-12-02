@@ -54,12 +54,11 @@ class LazyLastOctet implements Octet {
     /**
      * Добавление нового значения октета. Учет заполненности октета.
      * @param address массив со значениями октетов.
-     * @param octetNumber номер ячейки массива, содержащей значение для следующего октета.
      * @return true если адрес уникален(в хранилище ещё нет такого адреса) и был сохран в хранилище,
      * false если хранилище уже содержит такой адрес.
      */
     @Override
-    public boolean addNextOctet(short[] address, int octetNumber) {
+    public boolean addNextOctet(short[] address) {
         return true;
 //        whichBlock(address[octetNumber]);
 ////        int position = 0;

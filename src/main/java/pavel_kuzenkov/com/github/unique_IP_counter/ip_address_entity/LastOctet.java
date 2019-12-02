@@ -38,16 +38,16 @@ class LastOctet implements Octet {
     /**
      * Добавление нового значения октета. Учет заполненности октета.
      * @param address массив со значениями октетов.
-     * @param octetNumber номер ячейки массива, содержащей значение для следующего октета.
      * @return true если адрес уникален(в хранилище ещё нет такого адреса) и был сохран в хранилище,
      * false если хранилище уже содержит такой адрес.
      */
     @Override
-    public boolean addNextOctet(short[] address, int octetNumber) {
-        if (!lastOctets[address[octetNumber]]) {
-            lastOctets[address[octetNumber]] = true;
+    public boolean addNextOctet(short[] address) {
+        if (!lastOctets[address[3]]) {
+            lastOctets[address[3]] = true;
             if (++fillCounter >= 256) {
                 full = true;
+                lastOctets = null; //В данный октет пришли все возможные значения. Начинаем освобождать память (схлопывать ветвь).
             }
             return true;
         } else return false;

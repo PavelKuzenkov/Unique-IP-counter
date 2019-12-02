@@ -1,15 +1,15 @@
 package pavel_kuzenkov.com.github.unique_IP_counter.ip_address_entity;
 
 /**
- * Class LazyLastOctet. Абстракция непоследнего октета.
+ * Class LazyThirdOctet. Абстракция третьего октета.
  * Работает в "ленивом" режиме инициализации. Вместо одного массива
  * со значениями следующего октета хранит 4 массива, которые инициализируются по мере надобности.
  * Хранит в массивах ссылки на следующий Octet.
  *
  * @author Kuzenkov Pavel.
- * @since 01.12.2019
+ * @since 02.12.2019
  */
-class LazyNotLastOctet implements Octet {
+public class LazyThirdOctet implements Octet {
 
     /**
      * Блоки "ленивой" инициализации. Содержат значения следующего октета.
@@ -46,7 +46,7 @@ class LazyNotLastOctet implements Octet {
     }
 
     @Override
-    public boolean addNextOctet(short[] address, int octetNumber) {
+    public boolean addNextOctet(short[] address) {
         return false;
     }
 
