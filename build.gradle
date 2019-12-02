@@ -2,10 +2,6 @@ apply plugin: 'eclipse-wtp'
 apply plugin: 'application'
 apply plugin: 'java'
 
-repositories {
-    mavenCentral()
-}
-
 mainClassName = 'pavel_kuzenkov.com.github.unique_IP_counter.Application'
 
 jar {
