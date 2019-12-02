@@ -19,10 +19,9 @@ interface Octet {
     /**
      * Добавление нового значения октета.
      * @param address массив со значениями октетов.
-     * @param octetNumber номер ячейки массива, содержащей значение для следующего октета.
      * @return true если адрес уникален(в хранилище ещё нет такого адреса) и был сохран в хранилище,
      * false если хранилище уже содержит такой адрес.
      */
-    boolean addNextOctet(short[] address, int octetNumber);
+    boolean addNextOctet(short[] address);
 
 }
