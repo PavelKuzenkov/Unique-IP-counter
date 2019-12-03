@@ -55,6 +55,7 @@ class LazyLastOctet implements Octet {
     //Возможно код не совсем понятен при чтении, из-за обилия "хардкода". Не стал выводить в отдельные методы и заводить переменные т.к. экземпляров этого класса может создаться очень много.
     @Override
     public boolean addNextOctet(short[] address) {
+        if (blocksFull[address[3] / 64]) return false;//Если блок уже был заполнен - сразу выходим. Такой адрес уже есть в хранилище.
         boolean[] destination = getNeededBlock(address[3]);
         if (!destination[address[3] % 64]) { //Т.к. 4 массива по 64 ячейки
             destination[address[3] % 64] = true;
@@ -69,21 +70,22 @@ class LazyLastOctet implements Octet {
 
     /**
      * Определяем, с каким блоком "ленивой" инициализации предстоит работать.
-     * Если нужный блок еще не инициализирован и не был заполнен до этого - он проинициализируется.
+     * Если нужный блок еще не инициализирован - он проинициализируется.
+     * Метод не проверяет, был ли блок заполнен, поэтому вызывается только после проверки на заполненность.
      * @param octetValue Значение октета.
      * @return нужный нам блок.
      */
     private boolean[] getNeededBlock(short octetValue) {
         if (octetValue >= 0 && octetValue < 64) {
-            return lastOctetsBlock1 != null && !blocksFull[0] ? lastOctetsBlock1 : (lastOctetsBlock1 = new boolean[64]);
+            return lastOctetsBlock1 != null ? lastOctetsBlock1 : (lastOctetsBlock1 = new boolean[64]);
         }
         if (octetValue >= 64 && octetValue < 128) {
-            return lastOctetsBlock2 != null && !blocksFull[1] ? lastOctetsBlock2 : (lastOctetsBlock2 = new boolean[64]);
+            return lastOctetsBlock2 != null ? lastOctetsBlock2 : (lastOctetsBlock2 = new boolean[64]);
         }
         if (octetValue >= 128 && octetValue < 192) {
-            return lastOctetsBlock3 != null && !blocksFull[2] ? lastOctetsBlock3 : (lastOctetsBlock3 = new boolean[64]);
+            return lastOctetsBlock3 != null ? lastOctetsBlock3 : (lastOctetsBlock3 = new boolean[64]);
         }
-        return lastOctetsBlock4 != null && !blocksFull[3] ? lastOctetsBlock4 : (lastOctetsBlock4 = new boolean[64]); //Не стал делать ещё одну проверку потому что по идее другие значения в хранилище прийти не могут(проверка на входе хранилища)
+        return lastOctetsBlock4 != null ? lastOctetsBlock4 : (lastOctetsBlock4 = new boolean[64]); //Не стал делать ещё одну проверку потому что по идее другие значения в хранилище прийти не могут(проверка на входе хранилища)
 
     }
 
