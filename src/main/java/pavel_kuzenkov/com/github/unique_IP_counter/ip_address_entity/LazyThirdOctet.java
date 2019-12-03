@@ -58,6 +58,9 @@ public class LazyThirdOctet implements Octet {
         Octet[] destinationBlock = getNeededBlock(address[2]);
         boolean result = false;
         Octet destinationOctet = destinationBlock[address[2] % 64]; //Т.к. 4 массива по 64 ячейки
+        if (destinationOctet == null) {
+            return createNewOctetAndAdd(destinationBlock, address);
+        }
         if (!destinationOctet.isFull()) {
             result = destinationOctet.addNextOctet(address);
             if (destinationOctet.isFull()) { //Возможно после добавления, следующий октет заполнился.
@@ -89,6 +92,17 @@ public class LazyThirdOctet implements Octet {
             return nextOctetsBlock3 != null ? nextOctetsBlock3 : (nextOctetsBlock3 = new Octet[64]);
         }
         return nextOctetsBlock4 != null ? nextOctetsBlock4 : (nextOctetsBlock4 = new Octet[64]); //Не стал делать ещё одну проверку потому что по идее другие значения в хранилище прийти не могут(проверка на входе хранилища)
+    }
+
+    /**
+     * Инициализация нового октета и запись в него нового значения.
+     * @param address Массив значений октетов IP-адреса.
+     * @return true т.к. адрес уникален(новый октет) и был сохран в хранилище.
+     */
+    private boolean createNewOctetAndAdd(Octet[] destinationBlock, short[] address) {
+        LazyLastOctet newOctet = new LazyLastOctet();
+        destinationBlock[address[2] / 64] = newOctet;
+        return newOctet.addNextOctet(address);
     }
 
     /**
