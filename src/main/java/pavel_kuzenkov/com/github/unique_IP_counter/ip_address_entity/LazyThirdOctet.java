@@ -60,40 +60,15 @@ public class LazyThirdOctet implements Octet {
         Octet destinationOctet = destinationBlock[address[2] % 64]; //Т.к. 4 массива по 64 ячейки
         if (!destinationOctet.isFull()) {
             result = destinationOctet.addNextOctet(address);
-            if (destinationOctet.isFull()) {
-                if ((fillCounters[address[2] / 64] = ++fillCounters[address[3] / 64]) >= 64) {
+            if (destinationOctet.isFull()) { //Возможно после добавления, следующий октет заполнился.
+                if ((fillCounters[address[2] / 64] = ++fillCounters[address[3] / 64]) >= 64) {//В принципе можно объеденить в один if.
                     blocksFull[address[2] / 64] = true;
                     deleteNeededBlock(address[2] / 64); //В данный блок пришли все возможные значения. Начинаем освобождать память (схлопывать ветвь).
                     full = (blocksFull[0] && blocksFull[1] && blocksFull[2] && blocksFull[3]); //Если заполнены все 4 блока - значит в октет пришли все возможные значения.
                 }
             }
-            return true;
-        } else return false;
-
-//        boolean result = false;
-//        if (!destination.isFull()) {
-//            result = destination.addNextOctet(address);
-//            if (destination.isFull()) {  //Возможно после добавления, следующий октет заполнился.
-//                if (++fillCounter >= 256) { //В принципе можно объеденить в один if.
-//                    full = true;
-//                    nextOctets = null; //В данный октет пришли все возможные значения. Начинаем освобождать память (схлопывать ветвь).
-//                }
-//            }
-//        }
-//        return result;
-
-
-//        if (blocksFull[address[3] / 64]) return false;//Если блок уже был заполнен - сразу выходим. Такой адрес уже есть в хранилище.
-//        boolean[] destination = getNeededBlock(address[3]);
-//        if (!destination[address[3] % 64]) { //Т.к. 4 массива по 64 ячейки
-//            destination[address[3] % 64] = true;
-//            if ((fillCounters[address[3] / 64] = ++fillCounters[address[3] / 64]) >= 64) {
-//                blocksFull[address[3] / 64] = true;
-//                deleteNeededBlock(address[3] / 64);//В данный блок пришли все возможные значения. Начинаем освобождать память (схлопывать ветвь).
-//                full = (blocksFull[0] && blocksFull[1] && blocksFull[2] && blocksFull[3]); //Если заполнены все 4 блока - значит в октет пришли все возможные значения.
-//            }
-//            return true;
-//        } else return false;
+        }
+        return result;
     }
 
     /**
@@ -114,7 +89,6 @@ public class LazyThirdOctet implements Octet {
             return nextOctetsBlock3 != null ? nextOctetsBlock3 : (nextOctetsBlock3 = new Octet[64]);
         }
         return nextOctetsBlock4 != null ? nextOctetsBlock4 : (nextOctetsBlock4 = new Octet[64]); //Не стал делать ещё одну проверку потому что по идее другие значения в хранилище прийти не могут(проверка на входе хранилища)
-
     }
 
     /**
