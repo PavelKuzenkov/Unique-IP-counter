@@ -9,7 +9,7 @@ package pavel_kuzenkov.com.github.unique_IP_counter.ip_address_entity;
  * @author Kuzenkov Pavel.
  * @since 02.12.2019
  */
-public class ThirdOctet implements Octet {
+class ThirdOctet implements Octet {
 
     /**
      * Массив со следующими октетами.

@@ -9,7 +9,7 @@ package pavel_kuzenkov.com.github.unique_IP_counter.ip_address_entity;
  * @author Kuzenkov Pavel.
  * @since 02.12.2019
  */
-public class LazyThirdOctet implements Octet {
+class LazyThirdOctet implements Octet {
 
     /**
      * Блоки "ленивой" инициализации. Содержат значения следующего октета.
