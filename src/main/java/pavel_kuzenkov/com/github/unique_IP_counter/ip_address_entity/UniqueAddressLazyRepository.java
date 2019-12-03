@@ -55,7 +55,7 @@ class UniqueAddressLazyRepository implements AddressRepository {
 //    private long uniqueAddressCounter = 0;
 
     @Override
-    public boolean put(short[] incomingAddress) {
+    public boolean put(int[] incomingAddress) {
         return true;
 //        whichBlock(incomingAddress[0]);
 //        int position = 0;

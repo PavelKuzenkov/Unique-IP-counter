@@ -42,7 +42,7 @@ class LastOctet implements Octet {
      * false если хранилище уже содержит такой адрес.
      */
     @Override
-    public boolean addNextOctet(short[] address) {
+    public boolean addNextOctet(int[] address) {
         if (!lastOctets[address[3]]) {
             lastOctets[address[3]] = true;
             if (++fillCounter >= 256) {

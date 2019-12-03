@@ -59,7 +59,7 @@ class LazyThirdOctet implements Octet {
      */
     //Возможно код не совсем понятен при чтении, из-за обилия "хардкода". Не стал выводить в отдельные методы и заводить переменные т.к. экземпляров этого класса может создаться очень много.
     @Override
-    public boolean addNextOctet(short[] address) {
+    public boolean addNextOctet(int[] address) {
         if (blocksFull[address[2] / 64]) return false; //Если блок уже был заполнен - сразу выходим. Такой адрес уже есть в хранилище.
         Octet[] destinationBlock = getDestinationBlock(address[2]);
         boolean result = false;
@@ -87,7 +87,7 @@ class LazyThirdOctet implements Octet {
      * @param octetValue Значение октета.
      * @return нужный нам блок.
      */
-    private Octet[] getDestinationBlock(short octetValue) {
+    private Octet[] getDestinationBlock(int octetValue) {
         if (octetValue >= 0 && octetValue < 64) {
             return nextOctetsBlock1 != null ? nextOctetsBlock1 : (nextOctetsBlock1 = new Octet[64]);
         }
@@ -105,7 +105,7 @@ class LazyThirdOctet implements Octet {
      * @param address Массив значений октетов IP-адреса.
      * @return true т.к. адрес уникален(новый октет) и был сохран в хранилище.
      */
-    private boolean createNewOctetAndAdd(Octet[] destinationBlock, short[] address) {
+    private boolean createNewOctetAndAdd(Octet[] destinationBlock, int[] address) {
         LazyLastOctet newOctet = new LazyLastOctet();
         destinationBlock[address[2] % 64] = newOctet;
         return newOctet.addNextOctet(address);

@@ -22,6 +22,6 @@ interface Octet {
      * @return true если адрес уникален(в хранилище ещё нет такого адреса) и был сохран в хранилище,
      * false если хранилище уже содержит такой адрес.
      */
-    boolean addNextOctet(short[] address);
+    boolean addNextOctet(int[] address);
 
 }

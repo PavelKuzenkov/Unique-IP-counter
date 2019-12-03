@@ -14,7 +14,7 @@ public interface AddressRepository {
      * @return true если адрес уникален(в хранилище ещё нет такого адреса) и был сохран в хранилище,
      * false если хранилище уже содержит такой адрес.
      */
-    boolean put(short[] incomingAddress);
+    boolean put(int[] incomingAddress);
 
     /**
      * Проверка хранилища на заполненность.

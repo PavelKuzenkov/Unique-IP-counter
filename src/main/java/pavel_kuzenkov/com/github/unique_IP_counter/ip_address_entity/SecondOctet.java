@@ -43,7 +43,7 @@ class SecondOctet implements Octet {
      * false если хранилище уже содержит такой адрес.
      */
     @Override
-    public boolean addNextOctet(short[] address) {
+    public boolean addNextOctet(int[] address) {
         Octet destination = nextOctets[address[1]];
         if (destination == null) {
             return createNewOctetAndAdd(address);
@@ -66,7 +66,7 @@ class SecondOctet implements Octet {
      * @param address Массив значений октетов IP-адреса.
      * @return true т.к. адрес уникален(новый октет) и был сохран в хранилище.
      */
-    private boolean createNewOctetAndAdd(short[] address) {
+    private boolean createNewOctetAndAdd(int[] address) {
         ThirdOctet newOctet = new ThirdOctet();
         nextOctets[address[1]] = newOctet;
         return newOctet.addNextOctet(address);

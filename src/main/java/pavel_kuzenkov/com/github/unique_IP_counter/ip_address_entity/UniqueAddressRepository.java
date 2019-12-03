@@ -46,7 +46,7 @@ class UniqueAddressRepository implements AddressRepository{
      * false если хранилище уже содержит такой адрес.
      */
     @Override
-    public boolean put(short[] incomingAddress) {
+    public boolean put(int[] incomingAddress) {
         if (!isValidAddress(incomingAddress)) {
             printInfo(incomingAddress);
             return false;
@@ -73,7 +73,7 @@ class UniqueAddressRepository implements AddressRepository{
      * @param incomingAddress Массив значений октетов IP-адреса.
      * @return true т.к. адрес уникален(новый октет) и был сохран в хранилище.
      */
-    private boolean createNewOctetAndAdd(short[] incomingAddress) {
+    private boolean createNewOctetAndAdd(int[] incomingAddress) {
         SecondOctet newOctet = new SecondOctet();
         addresses[incomingAddress[0]] = newOctet;
         return newOctet.addNextOctet(incomingAddress);
@@ -85,7 +85,7 @@ class UniqueAddressRepository implements AddressRepository{
      * @param incomingAddress Массив значений октетов IP-адреса.
      * @return true если адрес валидный, false если адрес не валидный.
      */
-    private boolean isValidAddress(short[] incomingAddress) {
+    private boolean isValidAddress(int[] incomingAddress) {
         if (incomingAddress.length != 4) {
             return false;
         }
@@ -101,9 +101,9 @@ class UniqueAddressRepository implements AddressRepository{
      * вывод в консоль сообщения о поступлении невалидного адреса.
      * @param incomingAddress Массив значений октетов IP-адреса.
      */
-    private void printInfo(short[] incomingAddress) {
+    private void printInfo(int[] incomingAddress) {
         StringBuilder message = new StringBuilder();
-        for (short address : incomingAddress) {
+        for (int address : incomingAddress) {
             message.append(address).append(".");
         }
         message.append(" - невалидный IP-адрес!");

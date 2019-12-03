@@ -54,7 +54,7 @@ class LazyLastOctet implements Octet {
      */
     //Возможно код не совсем понятен при чтении, из-за обилия "хардкода". Не стал выводить в отдельные методы и заводить переменные т.к. экземпляров этого класса может создаться очень много.
     @Override
-    public boolean addNextOctet(short[] address) {
+    public boolean addNextOctet(int[] address) {
         if (blocksFull[address[3] / 64]) return false;//Если блок уже был заполнен - сразу выходим. Такой адрес уже есть в хранилище.
         boolean[] destination = getDestinationBlock(address[3]);
         if (!destination[address[3] % 64]) { //Т.к. 4 массива по 64 ячейки
@@ -75,7 +75,7 @@ class LazyLastOctet implements Octet {
      * @param octetValue Значение октета.
      * @return нужный нам блок.
      */
-    private boolean[] getDestinationBlock(short octetValue) {
+    private boolean[] getDestinationBlock(int octetValue) {
         if (octetValue >= 0 && octetValue < 64) {
             return lastOctetsBlock1 != null ? lastOctetsBlock1 : (lastOctetsBlock1 = new boolean[64]);
         }
