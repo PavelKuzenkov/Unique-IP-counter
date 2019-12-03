@@ -55,7 +55,7 @@ public class LazyThirdOctet implements Octet {
     @Override
     public boolean addNextOctet(short[] address) {
         if (blocksFull[address[2] / 64]) return false; //Если блок уже был заполнен - сразу выходим. Такой адрес уже есть в хранилище.
-        Octet[] destinationBlock = getNeededBlock(address[2]);
+        Octet[] destinationBlock = getDestinationBlock(address[2]);
         boolean result = false;
         Octet destinationOctet = destinationBlock[address[2] % 64]; //Т.к. 4 массива по 64 ячейки
         if (destinationOctet == null) {
@@ -81,7 +81,7 @@ public class LazyThirdOctet implements Octet {
      * @param octetValue Значение октета.
      * @return нужный нам блок.
      */
-    private Octet[] getNeededBlock(short octetValue) {
+    private Octet[] getDestinationBlock(short octetValue) {
         if (octetValue >= 0 && octetValue < 64) {
             return nextOctetsBlock1 != null ? nextOctetsBlock1 : (nextOctetsBlock1 = new Octet[64]);
         }
