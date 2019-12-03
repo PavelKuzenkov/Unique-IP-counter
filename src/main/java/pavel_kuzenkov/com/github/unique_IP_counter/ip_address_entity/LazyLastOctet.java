@@ -14,6 +14,7 @@ class LazyLastOctet implements Octet {
 
     /**
      * Блоки "ленивой" инициализации. Содержат значения последнего октета.
+     * Инициалихируются массивами по 64 ячейки каждый, вместо одного массива на 256 ячеек.
      */
     private boolean[] lastOctetsBlock1 = null;
     private boolean[] lastOctetsBlock2 = null;
@@ -28,18 +29,12 @@ class LazyLastOctet implements Octet {
     /**
      * Индикаторы заполненности блоков "ленивой" инициализации.
      */
-    private boolean block1full = false;
-    private boolean block2full = false;
-    private boolean block3full = false;
-    private boolean block4full = false;
+    private boolean[] blocksFull = new boolean[4];
 
     /**
      * Счетчики заполненности блоков "ленивой" инициализации.
      */
-    private byte fillCounter1 = 0;
-    private byte fillCounter2 = 0;
-    private byte fillCounter3 = 0;
-    private byte fillCounter4 = 0;
+    private byte[] fillCounters = new byte[4]; //По идее так должно уходить чуть меньше памяти, чем с четыремя отдельными переменными. Даже не смотря на накладные расходы на массив.
 
     /**
      * Проверка данного октета на заполненность.
@@ -57,47 +52,58 @@ class LazyLastOctet implements Octet {
      * @return true если адрес уникален(в хранилище ещё нет такого адреса) и был сохран в хранилище,
      * false если хранилище уже содержит такой адрес.
      */
+    //Возможно код не совсем понятен при чтении, из-за обилия "хардкода". Не стал выводить в отдельные методы и заводить переменные т.к. экземпляров этого класса может создаться очень много.
     @Override
     public boolean addNextOctet(short[] address) {
-        return true;
-//        whichBlock(address[octetNumber]);
-////        int position = 0;
-//        if (!lastOctets[address[octetNumber]]) {
-//            lastOctets[address[octetNumber]] = true;
-//            if (++fillCounter == 256) full = true;
-//            return true;
-//        } else return false;
+        boolean[] destination = getNeededBlock(address[3]);
+        if (!destination[address[3] % 64]) { //Т.к. 4 массива по 64 ячейки
+            destination[address[3] % 64] = true;
+            if ((fillCounters[address[3] / 64] = ++fillCounters[address[3] / 64]) >= 64) {
+                blocksFull[address[3] / 64] = true;
+                deleteNeededBlock(address[3] / 64);//В данный блок пришли все возможные значения. Начинаем освобождать память (схлопывать ветвь).
+                full = (blocksFull[0] && blocksFull[1] && blocksFull[2] && blocksFull[3]); //Если заполнены все 4 блока - значит в октет пришли все возможные значения.
+            }
+            return true;
+        } else return false;
     }
 
     /**
-     * Определяем, в какой блок нужно добавить новое значение.
-     * @param firstOctetValue Значение октета.
-     * @return номер блока.
+     * Определяем, с каким блоком "ленивой" инициализации предстоит работать.
+     * Если нужный блок еще не инициализирован и не был заполнен до этого - он проинициализируется.
+     * @param octetValue Значение октета.
+     * @return нужный нам блок.
      */
-    private int whichBlock(short firstOctetValue) {
-        if (firstOctetValue >= 0 && firstOctetValue < 64) return 1;
-        if (firstOctetValue >= 64 && firstOctetValue < 128) return 2;
-        if (firstOctetValue >= 128 && firstOctetValue < 192) return 3;
-        return 4;
+    private boolean[] getNeededBlock(short octetValue) {
+        if (octetValue >= 0 && octetValue < 64) {
+            return lastOctetsBlock1 != null && !blocksFull[0] ? lastOctetsBlock1 : (lastOctetsBlock1 = new boolean[64]);
+        }
+        if (octetValue >= 64 && octetValue < 128) {
+            return lastOctetsBlock2 != null && !blocksFull[1] ? lastOctetsBlock2 : (lastOctetsBlock2 = new boolean[64]);
+        }
+        if (octetValue >= 128 && octetValue < 192) {
+            return lastOctetsBlock3 != null && !blocksFull[2] ? lastOctetsBlock3 : (lastOctetsBlock3 = new boolean[64]);
+        }
+        return lastOctetsBlock4 != null && !blocksFull[3] ? lastOctetsBlock4 : (lastOctetsBlock4 = new boolean[64]); //Не стал делать ещё одну проверку потому что по идее другие значения в хранилище прийти не могут(проверка на входе хранилища)
+
     }
 
     /**
-     * Инициализация нужного блока со значениями последнего октета.
-     * @param blocNumber номер блока, который необходимо инициализировать.
+     * Удаление заполненного блока со значениями последнего октета.
+     * @param blocNumber номер блока, который необходимо удалить.
      */
-    private void initiateOctetsBlock(int blocNumber) {
+    private void deleteNeededBlock(int blocNumber) {
         switch (blocNumber) {
+            case 0:
+                lastOctetsBlock1 = null;
+                break;
             case 1:
-                lastOctetsBlock1 = new boolean[64];
+                lastOctetsBlock2 = null;
                 break;
             case 2:
-                lastOctetsBlock2 = new boolean[64];
+                lastOctetsBlock3 = null;
                 break;
             case 3:
-                lastOctetsBlock3 = new boolean[64];
-                break;
-            case 4:
-                lastOctetsBlock4 = new boolean[64];
+                lastOctetsBlock4 = null;
                 break;
         }
     }
