@@ -34,10 +34,20 @@ class UniqueAddressRepository implements AddressRepository{
      */
     private int fillCounter = 0;
 
-//    /**
+    //    /**
 //     * Счетчик уникальных адресов.
 //     */
 //    private long uniqueAddressCounter = 0;
+
+    /**
+     * Проверка хранилища на заполненность.
+     * @return true если хранилище заполнено (содержит все возможные варианты IP-адресов),
+     * false если хранилище ещё не заполнено.
+     */
+    @Override
+    public boolean isFull() {
+        return full;
+    }
 
     /**
      * Сохранение нового уникального IP-адреса в хранилище.
@@ -108,11 +118,6 @@ class UniqueAddressRepository implements AddressRepository{
         }
         message.append(" - невалидный IP-адрес!");
         System.out.println(message);
-    }
-
-    @Override
-    public boolean isFull() {
-        return full;
     }
 
 //    @Override
