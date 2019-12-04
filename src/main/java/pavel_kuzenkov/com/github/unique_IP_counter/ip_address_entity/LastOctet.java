@@ -23,7 +23,7 @@ class LastOctet implements Octet {
     /**
      * Счетчик заполненности массива с уникальными адресами.
      */
-    private short fillCounter = 0;
+    private int fillCounter = 0;
 
     /**
      * Проверка данного октета на заполненность.

@@ -24,7 +24,7 @@ class ThirdOctet implements Octet {
     /**
      * Счетчик заполненности массива со следующим октетом.
      */
-    private short fillCounter = 0;
+    private int fillCounter = 0;
 
     /**
      * Проверка данного октета на заполненность.
