@@ -119,7 +119,7 @@ class LazySecondOctet implements Octet {
     }
 
     /**
-     * Удаление заполненного блока со значениями последнего октета.
+     * Удаление заполненного блока со значениями следующего октета.
      * @param blocNumber номер блока, который необходимо удалить.
      */
     private void deleteNeededBlock(int blocNumber) {
