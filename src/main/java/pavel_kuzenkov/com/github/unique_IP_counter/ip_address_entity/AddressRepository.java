@@ -23,10 +23,9 @@ public interface AddressRepository {
      */
     boolean isFull();
 
-    // TODO вынести функционал за пределы класса
-//    /**
-//     * Возвращает количество хранимых уникальных IP-адресов.
-//     * @return количество хранимых уникальных IP-адресов.
-//     */
-//    long getNumberOfUniqueAddresses();
+    /**
+     * Возвращает количество хранимых уникальных IP-адресов.
+     * @return количество хранимых уникальных IP-адресов.
+     */
+    long getNumberOfUniqueAddresses();
 }

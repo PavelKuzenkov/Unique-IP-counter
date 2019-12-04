@@ -46,10 +46,10 @@ class UniqueAddressLazyRepository implements AddressRepository {
      */
     private byte[] fillCounters = new byte[4]; //По идее так должно уходить чуть меньше памяти, чем с четыремя отдельными переменными. Даже не смотря на накладные расходы на массив.
 
-//    /**
-//     * Счетчик уникальных адресов.
-//     */
-//    private long uniqueAddressCounter = 0;
+    /**
+     * Счетчик уникальных IP-адресов попавших в хранилище.
+     */
+    private long uniqueAddressCounter = 0;
 
     /**
      * Проверка хранилища на заполненность.
@@ -60,6 +60,15 @@ class UniqueAddressLazyRepository implements AddressRepository {
     @Override
     public boolean isFull() {
         return full;
+    }
+
+    /**
+     * Проверка количества уникальных IP-адресов в хранилище.
+     * @return количество уникальных IP-адресов.
+     */
+    @Override
+    public long getNumberOfUniqueAddresses() {
+        return uniqueAddressCounter;
     }
 
     /**
