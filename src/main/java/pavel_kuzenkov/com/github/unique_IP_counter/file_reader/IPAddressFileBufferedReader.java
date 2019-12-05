@@ -29,6 +29,16 @@ public class IPAddressFileBufferedReader implements IPAddressFileReader {
     private Queue<int[]> buffer = new LinkedList<>();
 
     /**
+     * Количество прочитанных из файла строк.
+     */
+    private long lineCounter = 0;
+
+    /**
+     * Количество найденныйх валидных IP-адресов.
+     */
+    private long validAddressesCounter = 0;
+
+    /**
      * Флаг, благодаря которому даётся команда прекратить читать строки из файла. Также это индикатор
      * того, доступен ли файл для чтения.
      */
@@ -55,10 +65,9 @@ public class IPAddressFileBufferedReader implements IPAddressFileReader {
      * @throws FileNotFoundException Выбрасывается в случае если не удалось найти файл по заданному пути.
      */
     @Override
-    public void startReadAndProcess(String path) throws FileNotFoundException {
+    public void startReadAndProcess(String path) throws FileNotFoundException, IOException {
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
             reading = true;
-            long lineCounter = 0;
             String line;
             while ((line = br.readLine()) != null && reading) {
                 lineCounter++;
@@ -66,12 +75,17 @@ public class IPAddressFileBufferedReader implements IPAddressFileReader {
                     Thread.sleep(100);
                 }
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            if (reading) {
+            System.out.println("Конец файла. Прочитано " +
+                    lineCounter + " строк. Из них " +
+                    validAddressesCounter + " валидных IP-адресов.");
+            } else {
+                System.out.println("Чтение файла прервано. Прочитано " +
+                        lineCounter + " строк. Из них " +
+                        validAddressesCounter + " валидных IP-адресов.");
+            }
+        } catch (InterruptedException ie) {
+            ie.printStackTrace();
         } finally {
             reading = false;
         }
@@ -81,7 +95,8 @@ public class IPAddressFileBufferedReader implements IPAddressFileReader {
      * Обработка Входящей строки. Проверка на валидный IP-адрес. Преобразование в массив с октетами и сохранение в буфер.
      * Возвращаемый результат используется в качестве "отмашки" для продолжения чтения из файла. Именно поэтому
      * возвращается true если в строке не был найден IP-адрес. В этом случае в консоль выводится соответствующее
-     * сообщение, а данная строка просто игнорируется.
+     * сообщение, а данная строка просто игнорируется. При добавлении массива в буфер, считается количество найденных
+     * валидных IP-адресов.
      * @param incomingLine Входящая строка.
      * @return tru если строка успешно обработана и результат добавлен в буфер, или если строка не является валидным
      * IP-адресом т.е. можно продолжать чтение из файла.
@@ -93,7 +108,10 @@ public class IPAddressFileBufferedReader implements IPAddressFileReader {
             return true;
         }
         int[] processResult = getOctetsArray(incomingLine);
-        return buffer.size() < 2048 && buffer.offer(processResult);
+        if (buffer.size() < 2048 && buffer.offer(processResult)) {
+            validAddressesCounter++;
+            return true;
+        } else return false;
     }
 
     /**
@@ -137,22 +155,4 @@ public class IPAddressFileBufferedReader implements IPAddressFileReader {
     public boolean isWorking() {
         return reading;
     }
-
-//    public static void main(String args[]) {
-//
-//        IPAddressFileBufferedReader reader = new IPAddressFileBufferedReader();
-//        String fileName = "IP-addresses.txt";
-//        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
-//            String line;
-//            while ((line = br.readLine()) != null) {
-//                while (!processAndToBuff(line)) {
-//                    Thread.sleep(100);
-//                }
-//            }
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException ioe) {
-//            ioe.printStackTrace();
-//        }
-//    }
 }
