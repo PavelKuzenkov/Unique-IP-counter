@@ -17,7 +17,7 @@ public interface IPAddressFileReader {
     /**
      * Команда на старт. Поиск и открытие текстового файла с IP-адресами.
      * Обработка строк в файле. преобразование строк с IP-адресом в массив значений октетов.
-     * @param path Пут до текстового файла с IP-адресами.
+     * @param path Путь до текстового файла с IP-адресами.
      * @throws FileNotFoundException Выбрасывается в случае если не удалось найти файл по заданному пути.
      */
     void startReadAndProcess(String path) throws FileNotFoundException;
