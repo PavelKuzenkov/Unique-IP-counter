@@ -59,7 +59,7 @@ class UniqueAddressLazyRepository implements AddressRepository {
      */
     @Override
     public boolean isFull() {
-        return full;
+        return full || uniqueAddressCounter >= 4_294_967_296L;
     }
 
     /**
@@ -114,6 +114,7 @@ class UniqueAddressLazyRepository implements AddressRepository {
                 }
             }
         }
+        if (result) uniqueAddressCounter++;
         return result;
     }
 
