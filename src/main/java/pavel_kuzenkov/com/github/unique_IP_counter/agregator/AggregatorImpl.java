@@ -20,14 +20,29 @@ import java.io.IOException;
  */
 public class AggregatorImpl implements Aggregator {
 
+    /**
+     * Поле с классом для чтения файла.
+     */
     private IPAddressFileReader fileReader;
 
+    /**
+     * Хранилище уникальных IP-адресов.
+     */
     private AddressRepository addressRepository;
 
+    /**
+     * Имя файла с IP-адресами.
+     */
     private String filepath;
 
-    private long uniqueAddressCounter = 0;
+    /**
+     * Поле с результатом подсчётов.
+     */
+    private long numberOfUniqueAddress = 0;
 
+    /**
+     * Индикатор работы аггрегатора. 
+     */
     private boolean working = false;
 
     /**
@@ -46,7 +61,7 @@ public class AggregatorImpl implements Aggregator {
                 ie.printStackTrace();
             }
             countUniqueIP();
-            return uniqueAddressCounter;
+            return numberOfUniqueAddress;
         } else {
             return -1;
         }
@@ -94,14 +109,14 @@ public class AggregatorImpl implements Aggregator {
                     addressRepository.put(newAddress);
                     if (addressRepository.isFull()) {
                         fileReader.stopReadAndProcess();
-                        uniqueAddressCounter = addressRepository.getNumberOfUniqueAddresses();
+                        numberOfUniqueAddress = addressRepository.getNumberOfUniqueAddresses();
                         working = false;
                         break;
                     }
                 }
             } else {
                 working = false;
-                uniqueAddressCounter = addressRepository.getNumberOfUniqueAddresses();
+                numberOfUniqueAddress = addressRepository.getNumberOfUniqueAddresses();
                 break;
             }
         }
