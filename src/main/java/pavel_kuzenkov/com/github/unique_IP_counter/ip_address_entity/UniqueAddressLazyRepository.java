@@ -144,6 +144,7 @@ public class UniqueAddressLazyRepository implements AddressRepository {
     private boolean createNewOctetAndAdd(Octet[] destinationBlock, int[] address) {
         LazySecondOctet newOctet = new LazySecondOctet();
         destinationBlock[address[1] % 64] = newOctet;
+        uniqueAddressCounter++;
         return newOctet.addNextOctet(address);
     }
 
@@ -175,7 +176,7 @@ public class UniqueAddressLazyRepository implements AddressRepository {
      * @return true если адрес валидный, false если адрес не валидный.
      */
     private boolean isValidAddress(int[] incomingAddress) {
-        if (incomingAddress.length != 4) {
+        if (incomingAddress == null || incomingAddress.length != 4) {
             return false;
         }
         for (int i = 0; i < 4; i++) {

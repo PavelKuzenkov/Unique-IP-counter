@@ -98,6 +98,7 @@ public class UniqueAddressRepository implements AddressRepository{
     private boolean createNewOctetAndAdd(int[] incomingAddress) {
         SecondOctet newOctet = new SecondOctet();
         addresses[incomingAddress[0]] = newOctet;
+        uniqueAddressCounter++;
         return newOctet.addNextOctet(incomingAddress);
     }
 
@@ -108,7 +109,7 @@ public class UniqueAddressRepository implements AddressRepository{
      * @return true если адрес валидный, false если адрес не валидный.
      */
     private boolean isValidAddress(int[] incomingAddress) {
-        if (incomingAddress.length != 4) {
+        if (incomingAddress == null || incomingAddress.length != 4) {
             return false;
         }
         for (int i = 0; i < 4; i++) {
