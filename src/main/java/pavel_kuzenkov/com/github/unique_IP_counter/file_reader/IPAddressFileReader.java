@@ -41,5 +41,5 @@ public interface IPAddressFileReader {
      * Проверка, работает ли ещё IPAddressFileReader, происходит ли чтение из файла. Не закончился ли файл с IP-адресами.
      * @return true если идёт чтение из файла, false если чтение прекратилось, файл закончился.
      */
-    boolean isWorking();
+    boolean isReady();
 }

@@ -39,10 +39,15 @@ public class IPAddressFileBufferedReader implements IPAddressFileReader {
     private long validAddressesCounter = 0;
 
     /**
+     * Индикатор готовности reader'а возвратить адрес.
+     */
+    private boolean ready = false;
+
+    /**
      * Флаг, благодаря которому даётся команда прекратить читать строки из файла. Также это индикатор
      * того, доступен ли файл для чтения.
      */
-    private boolean reading = false;
+    private boolean stop = false;
 
     /**
      * Регулярное выражение, для определения, является ли строка валидным IP-адресом.
@@ -67,19 +72,20 @@ public class IPAddressFileBufferedReader implements IPAddressFileReader {
     @Override
     public void startReadAndProcess(String path) throws FileNotFoundException, IOException {
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
-            reading = true;
+            ready = true;
             String line;
-            while ((line = br.readLine()) != null && reading) {
+            while ((line = br.readLine()) != null && !stop) {
                 lineCounter++;
                 while (!processAndToBuff(line, lineCounter)) {
                     Thread.sleep(100);
                 }
             }
-            if (reading) {
+            if (ready) {
             System.out.println("Конец файла. Прочитано " +
                     lineCounter + " строк. Из них " +
                     validAddressesCounter + " валидных IP-адресов.");
-            } else {
+            }
+            if (stop) {
                 System.out.println("Чтение файла прервано. Прочитано " +
                         lineCounter + " строк. Из них " +
                         validAddressesCounter + " валидных IP-адресов.");
@@ -87,7 +93,10 @@ public class IPAddressFileBufferedReader implements IPAddressFileReader {
         } catch (InterruptedException ie) {
             ie.printStackTrace();
         } finally {
-            reading = false;
+            while (!buffer.isEmpty() && !stop) {
+                //Ждём пока другой поток не дочитает буфер или не даст команду "отбой".
+            }
+            ready = false;
         }
     }
 
@@ -104,7 +113,7 @@ public class IPAddressFileBufferedReader implements IPAddressFileReader {
      */
     private boolean processAndToBuff(String incomingLine, long lineCounter) {
         if (!IP_PATTERN.matcher(incomingLine).matches()) {
-            System.out.println("Строка №" + lineCounter + ": \"" + "\" не является валидным IP-адресом, и была проигнорирована!");
+            System.out.println("Строка №" + lineCounter + ": \"" + incomingLine + "\" не является валидным IP-адресом, и была проигнорирована!");
             return true;
         }
         int[] processResult = getOctetsArray(incomingLine);
@@ -143,7 +152,7 @@ public class IPAddressFileBufferedReader implements IPAddressFileReader {
      */
     @Override
     public void stopReadAndProcess() {
-        reading = false;
+        stop = true;
         buffer.clear();
     }
 
@@ -152,7 +161,7 @@ public class IPAddressFileBufferedReader implements IPAddressFileReader {
      * @return true если идёт чтение из файла, false если чтение прекратилось, файл закончился.
      */
     @Override
-    public boolean isWorking() {
-        return reading;
+    public boolean isReady() {
+        return ready;
     }
 }
