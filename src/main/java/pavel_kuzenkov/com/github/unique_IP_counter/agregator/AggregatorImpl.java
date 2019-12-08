@@ -38,6 +38,7 @@ public class AggregatorImpl implements Aggregator {
     public long startProcess() {
         if (checkConfig()) {
             startReadFile(this.filepath);
+            System.out.println("Обработка...");
             try {
                 Thread.sleep(100);
             } catch (InterruptedException ie) {
@@ -134,7 +135,7 @@ public class AggregatorImpl implements Aggregator {
      */
     @Override
     public void setIPAddressFileReader(IPAddressFileReader reader) {
-
+        fileReader = reader;
     }
 
     /**
