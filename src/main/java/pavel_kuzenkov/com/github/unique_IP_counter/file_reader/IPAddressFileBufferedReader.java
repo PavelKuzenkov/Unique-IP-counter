@@ -121,7 +121,7 @@ public class IPAddressFileBufferedReader implements IPAddressFileReader {
      */
     private int[] getOctetsArray(String incomingLine) {
         int[] result = new int[4];
-        String[] split = incomingLine.split(".");
+        String[] split = incomingLine.split("\\.");
         for (int i = 0; i < 4; i++) {
             result[i] = Integer.parseInt(split[i]);
         }
