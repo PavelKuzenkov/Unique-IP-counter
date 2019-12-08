@@ -14,11 +14,27 @@ import pavel_kuzenkov.com.github.unique_IP_counter.ip_address_entity.AddressRepo
 public interface Aggregator {
 
     /**
-     * Установка хранилища (тип алгоритма), file reader'а и старт процесса подсчёта количества уникальных IP-адресов в текстовом файле.
-     * @param filePath путь до файла.
-     * @param repository хранилище IP-адресов.
-     * @param reader file reader.
+     * старт процесса подсчёта количества уникальных IP-адресов в текстовом файле. Должен вызываться
+     * после setAddressRepository(), setFilePath(), setIPAddressFileReader().
      * @return количество уникальных IP-адресов в файле.
      */
-    long startProcess(String filePath, AddressRepository repository, IPAddressFileReader reader);
+    long startProcess();
+
+    /**
+     * Установка хранилища адресов (тип алгоритма).
+     * @param repository хранилище IP-адресов.
+     */
+    void setAddressRepository(AddressRepository repository);
+
+    /**
+     * Установка путя до файла.
+     * @param filePath путь до файла.
+     */
+    void setFilePath(String filePath);
+
+    /**
+     * Установка file reader'а.
+     * @param reader file reader.
+     */
+    void setIPAddressFileReader(IPAddressFileReader reader);
 }

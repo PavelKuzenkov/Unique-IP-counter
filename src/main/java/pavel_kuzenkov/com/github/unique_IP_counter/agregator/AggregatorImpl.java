@@ -20,29 +20,52 @@ public class AggregatorImpl implements Aggregator {
 
     private AddressRepository addressRepository;
 
+    private String filepath;
+
     private long uniqueAddressCounter = 0;
 
     private boolean working = false;
 
     /**
-     * Установка хранилища (тип алгоритма), file reader'а и старт процесса подсчёта количества уникальных IP-адресов в текстовом файле.
-     * @param filePath путь до файла.
-     * @param repository хранилище IP-адресов.
-     * @param reader file reader.
-     * @return количество уникальных IP-адресов в файле.
+     * Старт процесса подсчёта количества уникальных IP-адресов в текстовом файле. Должен вызываться
+     * после setAddressRepository(), setFilePath(), setIPAddressFileReader().
+     * @return количество уникальных IP-адресов в файле. -1 в случае неверной конфигурации Аггрегатора.
      */
     @Override
-    public long startProcess(String filePath, AddressRepository repository, IPAddressFileReader reader) {
-        fileReader = reader;
-        addressRepository = repository;
-        startReadFile(filePath);
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException ie) {
-            ie.printStackTrace();
+    public long startProcess() {
+        if (checkConfig()) {
+            startReadFile(this.filepath);
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ie) {
+                ie.printStackTrace();
+            }
+            countUniqueIP();
+            return uniqueAddressCounter;
+        } else {
+            return -1;
         }
-        countUniqueIP();
-        return uniqueAddressCounter;
+    }
+
+    /**
+     * Проверяем сконфигурирован ли аггрегатор.
+     * @return true если сконфигурирован, false если нет.
+     */
+    private boolean checkConfig() {
+        boolean result = true;
+        if (filepath == null) {
+            System.out.println("В аггрегаторе не указан путь до файла!");
+            result = false;
+        }
+        if (fileReader == null) {
+            System.out.println("В аггрегаторе не указан file reader!");
+            result = false;
+        }
+        if (addressRepository == null) {
+            System.out.println("В аггрегаторе не указано хранилище адресов!");
+            result = false;
+        }
+        return result;
     }
 
     /**
@@ -82,6 +105,33 @@ public class AggregatorImpl implements Aggregator {
                 break;
             }
         }
+    }
+
+    /**
+     * Установка хранилища адресов (тип алгоритма).
+     * @param repository хранилище IP-адресов.
+     */
+    @Override
+    public void setAddressRepository(AddressRepository repository) {
+        addressRepository = repository;
+    }
+
+    /**
+     * Установка путя до файла.
+     * @param filePath путь до файла.
+     */
+    @Override
+    public void setFilePath(String filePath) {
+        this.filepath = filePath;
+    }
+
+    /**
+     * Установка file reader'а.
+     * @param reader file reader.
+     */
+    @Override
+    public void setIPAddressFileReader(IPAddressFileReader reader) {
+
     }
 
     /**
