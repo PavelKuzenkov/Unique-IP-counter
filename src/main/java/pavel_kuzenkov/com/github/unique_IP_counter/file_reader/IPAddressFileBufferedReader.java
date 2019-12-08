@@ -4,8 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.regex.Pattern;
 
 /**
@@ -26,7 +26,7 @@ public class IPAddressFileBufferedReader implements IPAddressFileReader {
      * обработки только тех строки из текстового файла, которые представляют собой IP-адрес.
      * Массивы состоят из 4 ячеек, каждая ячейка содержыт значение актета.
      */
-    private Queue<int[]> buffer = new LinkedList<>();
+    private Queue<int[]> buffer = new ConcurrentLinkedQueue<>();
 
     /**
      * Количество прочитанных из файла строк.
