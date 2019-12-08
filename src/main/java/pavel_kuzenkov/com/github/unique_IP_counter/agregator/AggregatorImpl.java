@@ -40,7 +40,7 @@ public class AggregatorImpl implements Aggregator {
             startReadFile(this.filepath);
             System.out.println("Обработка...");
             try {
-                Thread.sleep(100);
+                Thread.sleep(100); //Засыпаем на всякий случай. Чтобы процесс чтения точно запустился.
             } catch (InterruptedException ie) {
                 ie.printStackTrace();
             }
@@ -88,23 +88,18 @@ public class AggregatorImpl implements Aggregator {
         working = true;
         int[] newAddress;
         while (working) {
-            if (fileReader.isWorking()) {
-                while ((newAddress = fileReader.getNextIPAddress()) == null && fileReader.isWorking()) {
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException ie) {
-                        ie.printStackTrace();
+            if (fileReader.isReady()) {
+                if ((newAddress = fileReader.getNextIPAddress()) != null) {
+                    addressRepository.put(newAddress);
+                    if (addressRepository.isFull()) {
+                        fileReader.stopReadAndProcess();
+                        uniqueAddressCounter = addressRepository.getNumberOfUniqueAddresses();
+                        working = false;
+                        break;
                     }
                 }
             } else {
                 working = false;
-                break;
-            }
-            if (!addressRepository.isFull()) {
-                addressRepository.put(newAddress);
-            } else {
-                working = false;
-                fileReader.stopReadAndProcess();
                 uniqueAddressCounter = addressRepository.getNumberOfUniqueAddresses();
                 break;
             }
