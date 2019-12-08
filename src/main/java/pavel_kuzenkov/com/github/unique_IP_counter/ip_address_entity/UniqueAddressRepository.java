@@ -16,7 +16,7 @@ package pavel_kuzenkov.com.github.unique_IP_counter.ip_address_entity;
  * @since 01.12.2019
  */
 
-class UniqueAddressRepository implements AddressRepository{
+public class UniqueAddressRepository implements AddressRepository{
 
     /**
      * Массив с последовательностью октетов (уникальных адресов). Данный массив является первым в последовательности.

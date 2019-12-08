@@ -18,7 +18,7 @@ package pavel_kuzenkov.com.github.unique_IP_counter.ip_address_entity;
  * @since 01.12.2019
  */
 
-class UniqueAddressLazyRepository implements AddressRepository {
+public class UniqueAddressLazyRepository implements AddressRepository {
 
     /**
      * Блоки "ленивой" инициализации. Содержат последовательности октетов (уникальных адресов).
