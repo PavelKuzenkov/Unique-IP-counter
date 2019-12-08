@@ -2,7 +2,7 @@ apply plugin: 'eclipse-wtp'
 apply plugin: 'application'
 apply plugin: 'java'
 
-mainClassName = 'pavel_kuzenkov.com.github.unique_IP_counter.Application'
+mainClassName = 'pavel_kuzenkov.com.github.unique_IP_counter.menu.Start'
 
 jar {
     archiveName = 'unique_IP_counter.jar'
