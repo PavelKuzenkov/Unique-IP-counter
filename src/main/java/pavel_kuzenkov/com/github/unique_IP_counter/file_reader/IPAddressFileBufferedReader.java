@@ -139,7 +139,7 @@ public class IPAddressFileBufferedReader implements IPAddressFileReader {
     }
 
     /**
-     * Команда на остановку чтения из файла. Закрытие файла.
+     * Команда на остановку чтения из файла.
      */
     @Override
     public void stopReadAndProcess() {
