@@ -81,14 +81,14 @@ public class IPAddressFileBufferedReader implements IPAddressFileReader {
                 }
             }
             if (ready) {
-            System.out.println("Конец файла. Прочитано " +
-                    lineCounter + " строк. Из них " +
-                    validAddressesCounter + " валидных IP-адресов.");
+            System.out.println("End of file. " +
+                    lineCounter + " lines were read. " +
+                    validAddressesCounter + " valid IPv4 addresses.");
             }
             if (stop) {
-                System.out.println("Чтение файла прервано. Прочитано " +
-                        lineCounter + " строк. Из них " +
-                        validAddressesCounter + " валидных IP-адресов.");
+                System.out.println("File reading interrupted. " +
+                        lineCounter + " lines were read. " +
+                        validAddressesCounter + " valid IPv4 addresses.");
             }
         } catch (InterruptedException ie) {
             ie.printStackTrace();
@@ -113,7 +113,7 @@ public class IPAddressFileBufferedReader implements IPAddressFileReader {
      */
     private boolean processAndToBuff(String incomingLine, long lineCounter) {
         if (!IP_PATTERN.matcher(incomingLine).matches()) {
-            System.out.println("Строка №" + lineCounter + ": \"" + incomingLine + "\" не является валидным IP-адресом, и была проигнорирована!");
+            System.out.println("Line №" + lineCounter + ": \"" + incomingLine + "\" is not a valid IPv4 address and was ignored!");
             return true;
         }
         int[] processResult = getOctetsArray(incomingLine);

@@ -196,7 +196,7 @@ public class UniqueAddressLazyRepository implements AddressRepository {
         for (int address : incomingAddress) {
             message.append(address).append(".");
         }
-        message.append(" - невалидный IP-адрес!");
+        message.append(" - is not a valid IPv4 address and was ignored!");
         System.out.println(message);
     }
 }

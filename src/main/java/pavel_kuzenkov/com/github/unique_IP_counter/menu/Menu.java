@@ -46,7 +46,7 @@ class Menu {
      */
     void fillActions(Start ui) {
         this.actions.clear();
-        this.actions.add(new EnterIPRepo(this.actions.size(), "Выбор алгоритма."));
+        this.actions.add(new EnterIPRepo(this.actions.size(), "Algorithm selection."));
         this.actions.add(this.actions.size(), new Exit(ui));
         int[] range = new int[this.actions.size()];
         for (int index = 0; index != range.length; index++) {
@@ -61,7 +61,7 @@ class Menu {
     private void fillAfterIPRepoAction() {
         Exit exit = (Exit) Menu.this.actions.get(1);
         Menu.this.actions.clear();
-        this.actions.add(new EnterPath(this.actions.size(), "Указать файл с IP-адресами."));
+        this.actions.add(new EnterPath(this.actions.size(), "Specify a file with IP addresses."));
         Menu.this.actions.add(Menu.this.actions.size(), new Exit(exit.getUi()));
         int[] range = new int[Menu.this.actions.size()];
         for (int index = 0; index != range.length; index++) {
@@ -76,7 +76,7 @@ class Menu {
     private void fillAfterProcess() {
         Exit exit = (Exit) Menu.this.actions.get(1);
         Menu.this.actions.clear();
-        this.actions.add(new OneMoreTime(this.actions.size(), "Ещё раз?", exit.getUi()));
+        this.actions.add(new OneMoreTime(this.actions.size(), "One more time?", exit.getUi()));
         Menu.this.actions.add(Menu.this.actions.size(), new Exit(exit.getUi()));
         int[] range = new int[Menu.this.actions.size()];
         for (int index = 0; index != range.length; index++) {
@@ -124,9 +124,9 @@ class Menu {
          * @param aggregator Место управления рабочим процессом.
          */
         public void execute(Input input, Aggregator aggregator) {
-            System.out.println("-------------- Выберите тип алгоритма: ------------------");
-            System.out.println("0. Хранилище в виде \"дерева\".");
-            System.out.println("1. Хранилище в виде \"дерева\" c \"ленивой\" инициализацией.");
+            System.out.println("------------------- Select algorithm: ---------------------");
+            System.out.println("0. \"Tree\" repository.");
+            System.out.println("1. \"Lazy tree\" repository.");
             int repoType = input.ask("Select: ", new int[]{0, 1});
             //TODO это должно происходить не здесь. По хорошему, нужно передавать в аггрегатор какой-нибудь енам, и исходя из значения енама, аггрегатор должен компоновать себя
             if (repoType == 0) {
@@ -160,11 +160,11 @@ class Menu {
          * @param aggregator Место управления рабочим процессом.
          */
         public void execute(Input input, Aggregator aggregator) {
-            System.out.println("---------- Определяем файл с IP-адресами. -------------");
-            String filePath = input.ask("Укажите файл с IP-адресами.");
+            System.out.println("---------- Defining a file with IP addresses. -------------");
+            String filePath = input.ask("Enter name/path of file with IP addresses.");
             aggregator.setFilePath(filePath);
             System.out.println();
-            System.out.println("Количество уникальных адресов в файле: " + aggregator.startProcess());
+            System.out.println("The number of unique addresses in the file: " + aggregator.startProcess());
             System.out.println("--------------------------------------------------------");
             fillAfterProcess();
         }

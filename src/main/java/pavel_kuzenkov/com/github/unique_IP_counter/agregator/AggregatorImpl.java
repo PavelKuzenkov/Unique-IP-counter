@@ -54,7 +54,7 @@ public class AggregatorImpl implements Aggregator {
     public long startProcess() {
         if (checkConfig()) {
             startReadFile(this.filepath);
-            System.out.println("Обработка...");
+            System.out.println("Processing...");
             try {
                 Thread.sleep(100); //Засыпаем на всякий случай. Чтобы процесс чтения точно запустился.
             } catch (InterruptedException ie) {
@@ -74,15 +74,15 @@ public class AggregatorImpl implements Aggregator {
     private boolean checkConfig() {
         boolean result = true;
         if (filepath == null) {
-            System.out.println("В аггрегаторе не указан путь до файла!");
+            System.out.println("No file path specified in aggregator!");
             result = false;
         }
         if (fileReader == null) {
-            System.out.println("В аггрегаторе не указан file reader!");
+            System.out.println("No file reader specified in aggregator!");
             result = false;
         }
         if (addressRepository == null) {
-            System.out.println("В аггрегаторе не указано хранилище адресов!");
+            System.out.println("No address repository specified in aggregator!");
             result = false;
         }
         return result;
@@ -165,9 +165,9 @@ public class AggregatorImpl implements Aggregator {
             try {
                 fileReader.startReadAndProcess(filePath);
             }  catch (FileNotFoundException fnfe) {
-                System.out.println("Файл " + filePath + " не найден! Проверьте корректность ввода.");
+                System.out.println("File " + filePath + " not found! Check that the input is correct.");
             } catch (IOException ioe) {
-                System.out.println("Ошибка при чтении файла!");
+                System.out.println("Error reading file!");
             }
         }
     }
