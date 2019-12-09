@@ -128,6 +128,7 @@ class Menu {
             System.out.println("0. Хранилище в виде \"дерева\".");
             System.out.println("1. Хранилище в виде \"дерева\" c \"ленивой\" инициализацией.");
             int repoType = input.ask("Select: ", new int[]{0, 1});
+            //TODO это должно происходить не здесь. По хорошему, нужно передавать в аггрегатор какой-нибудь енам, и исходя из значения енама, аггрегатор должен компоновать себя
             if (repoType == 0) {
                 aggregator.setAddressRepository(new UniqueAddressRepository());
             } else {
