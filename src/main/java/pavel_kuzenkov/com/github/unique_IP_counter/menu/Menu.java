@@ -46,6 +46,7 @@ class Menu {
      */
     void fillActions(Start ui) {
         this.actions.clear();
+        System.out.println("------------------- Unique IP counter ---------------------");
         this.actions.add(new EnterIPRepo(this.actions.size(), "Algorithm selection."));
         this.actions.add(this.actions.size(), new Exit(ui));
         int[] range = new int[this.actions.size()];
@@ -164,8 +165,8 @@ class Menu {
             String filePath = input.ask("Enter name/path of file with IP addresses.");
             aggregator.setFilePath(filePath);
             System.out.println();
-            System.out.println("The number of unique addresses in the file: " + aggregator.startProcess());
-            System.out.println("--------------------------------------------------------");
+            aggregator.startProcess();
+            System.out.println("------------------------------------------------------------");
             fillAfterProcess();
         }
     }
