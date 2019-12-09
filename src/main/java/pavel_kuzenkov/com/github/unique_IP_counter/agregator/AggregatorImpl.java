@@ -102,24 +102,33 @@ public class AggregatorImpl implements Aggregator {
      */
     private void countUniqueIP() {
         working = true;
+        long start = System.currentTimeMillis();
         int[] newAddress;
         while (working) {
             if (fileReader.isReady()) {
                 if ((newAddress = fileReader.getNextIPAddress()) != null) {
                     addressRepository.put(newAddress);
                     if (addressRepository.isFull()) {
-                        fileReader.stopReadAndProcess();
-                        numberOfUniqueAddress = addressRepository.getNumberOfUniqueAddresses();
-                        working = false;
+                        stopProcess(System.currentTimeMillis() - start);
                         break;
                     }
                 }
             } else {
-                working = false;
-                numberOfUniqueAddress = addressRepository.getNumberOfUniqueAddresses();
+                stopProcess(System.currentTimeMillis() - start);
                 break;
             }
         }
+    }
+
+    /**
+     * Отанавливаем процесс чтения и посчёта уникальных адресов.
+     */
+    private void stopProcess(long time) {
+        working = false;
+        fileReader.stopReadAndProcess();
+        numberOfUniqueAddress = addressRepository.getNumberOfUniqueAddresses();
+        System.out.println("The number of unique addresses in the file: " + numberOfUniqueAddress + ".");
+        System.out.println("Completed in " + time + " milliseconds.");
     }
 
     /**
