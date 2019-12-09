@@ -73,6 +73,7 @@ public class IPAddressFileBufferedReader implements IPAddressFileReader {
     public void startReadAndProcess(String path) throws FileNotFoundException, IOException {
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
             ready = true;
+            stop = false;
             String line;
             while ((line = br.readLine()) != null && !stop) {
                 lineCounter++;
