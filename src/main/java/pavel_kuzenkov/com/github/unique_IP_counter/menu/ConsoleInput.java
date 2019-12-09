@@ -43,26 +43,4 @@ class ConsoleInput implements Input {
         }
         return key;
     }
-
-//    /**
-//     * Работа с консолью. Ввод значений интервалов.
-//     * @param question1 вопрос от программы.
-//     * @param question2 вопрос от программы.
-//     * @return ввод пользователя в консоль. (Только типа double).
-//     */
-//    public double ask(String question1, String question2) {
-//        System.out.println(question1);
-//        System.out.println(question2);
-//        String value = this.input.nextLine();
-//        if (value.equals("infinity")
-//                || value.equals("+ infinity")
-//                || value.equals("+infinity")) {
-//            return Double.POSITIVE_INFINITY;
-//        }
-//        if (value.equals("- infinity")
-//                || value.equals("-infinity")) {
-//            return Double.NEGATIVE_INFINITY;
-//        }
-//        return Double.valueOf(value);
-//    }
 }

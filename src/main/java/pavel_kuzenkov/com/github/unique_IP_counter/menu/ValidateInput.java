@@ -40,25 +40,4 @@ class ValidateInput implements Input {
         } while (invalid);
         return value;
     }
-
-//    /**
-//     * Проверка корректности вводимых пользователем значений интервалов.
-//     * @param question1 вопрос от программы.
-//     * @param question2 вопрос от программы.
-//     * @return ввод пользователя в консоль.
-//     */
-//    public double ask(String question1, String question2) {
-//        boolean invalid = true;
-//        double value = 0;
-//        do {
-//            try {
-//                value = this.input.ask(question1, question2);
-//                invalid = false;
-//            } catch (NumberFormatException nfe) {
-//                System.out.println("Необходимо ввести корректное значение.");
-//            }
-//        } while (invalid);
-//        System.out.println(question1.concat(String.valueOf(value)).concat(System.lineSeparator()));
-//        return value;
-//    }
 }
