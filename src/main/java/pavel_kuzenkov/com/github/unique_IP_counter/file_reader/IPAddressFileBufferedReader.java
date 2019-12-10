@@ -24,7 +24,7 @@ public class IPAddressFileBufferedReader implements IPAddressFileReader {
     /**
      * Буфер для валидных IP-адресов в виде массивов чисел. Сюда попадают результаты
      * обработки только тех строки из текстового файла, которые представляют собой IP-адрес.
-     * Массивы состоят из 4 ячеек, каждая ячейка содержыт значение актета.
+     * Массивы состоят из 4 ячеек, каждая ячейка содержит значение актета.
      */
     private Queue<int[]> buffer = new ConcurrentLinkedQueue<>();
 
@@ -77,7 +77,8 @@ public class IPAddressFileBufferedReader implements IPAddressFileReader {
             String line;
             while ((line = br.readLine()) != null && !stop) {
                 lineCounter++;
-                while (!processAndToBuff(line, lineCounter)) {
+                while (!processAndToBuff(line, lineCounter) && !stop) {
+                    //Ждём пока другой поток не освободит место в буфере или не даст команду "отбой".
                     Thread.sleep(100);
                 }
             }
@@ -110,7 +111,7 @@ public class IPAddressFileBufferedReader implements IPAddressFileReader {
      * @param incomingLine Входящая строка.
      * @return tru если строка успешно обработана и результат добавлен в буфер, или если строка не является валидным
      * IP-адресом т.е. можно продолжать чтение из файла.
-     * false если если буфер заполнен.
+     * false если буфер заполнен.
      */
     private boolean processAndToBuff(String incomingLine, long lineCounter) {
         if (!IP_PATTERN.matcher(incomingLine).matches()) {
